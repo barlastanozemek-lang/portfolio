@@ -1,1 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barlas Tan Özemek — Music Producer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --base:#1c2b27;
+    --base-deep:#15211d;
+    --surface:#24382f;
+    --surface-2:#2c4239;
+    --amber:#d98e2b;
+    --amber-bright:#f0a83b;
+    --hot:#c8472e;
+    --cream:#ede6d6;
+    --muted:#93a39b;
+    --hair:rgba(237,230,214,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--base);
+    color:var(--cream);
+    font-family:'Spectral', serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  .display{font-family:'Big Shoulders Display', sans-serif;}
 
+  a{color:inherit;}
+
+  /* ---------- texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:50; opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- header strip ---------- */
+  .topstrip{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px clamp(20px,5vw,64px);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted);
+    border-bottom:1px solid var(--hair);
+  }
+  .rec{display:flex; align-items:center; gap:8px; color:var(--hot);}
+  .rec .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--hot);
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:clamp(64px,12vh,120px) clamp(20px,5vw,64px) clamp(40px,8vh,72px);
+    position:relative;
+  }
+  .hero h1{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:900;
+    font-size:clamp(40px,9.5vw,124px);
+    line-height:.88;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    color:var(--cream);
+  }
+  .hero h1 .nowrap-name{white-space:nowrap;}
+  .hero .role{
+    margin-top:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:clamp(12px,1.6vw,15px);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber-bright);
+  }
+  .hero .role span{color:var(--muted);}
+
+  /* VU meter */
+  .vu{
+    margin-top:44px;
+    display:flex; align-items:flex-end; gap:4px;
+    height:46px;
+  }
+  .vu .bar{
+    width:5px;
+    background:var(--surface-2);
+    border-radius:1px;
+    animation:meter 1.8s ease-in-out infinite;
+  }
+  .vu .bar:nth-child(odd){background:var(--amber);}
+  .vu .bar:nth-child(3n){background:var(--hot);}
+  @keyframes meter{
+    0%,100%{height:18%;}
+    50%{height:var(--h,80%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .vu .bar, .rec .dot{animation:none;}
+  }
+
+  .award-badge{
+    margin-top:36px;
+    display:inline-flex; align-items:center; gap:12px;
+    border:1px solid var(--amber);
+    color:var(--amber-bright);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    padding:10px 18px;
+  }
+  .award-badge b{color:var(--cream); font-weight:700;}
+
+  /* ---------- section labels ---------- */
+  .section-head{
+    padding:64px clamp(20px,5vw,64px) 8px;
+    display:flex; align-items:baseline; gap:18px;
+  }
+  .section-head .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px; color:var(--amber);
+    letter-spacing:.1em;
+  }
+  .section-head h2{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(22px,3.4vw,34px);
+    letter-spacing:.02em;
+  }
+  .section-head .line{
+    flex:1; height:1px; background:var(--hair); margin-left:8px;
+  }
+  .section-sub{
+    padding:0 clamp(20px,5vw,64px);
+    color:var(--muted);
+    font-size:14.5px;
+    max-width:560px;
+  }
+
+  /* ---------- channel strip (work item) ---------- */
+  .channels{
+    padding:28px clamp(20px,5vw,64px) 16px;
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .channel{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    background:var(--surface);
+    border:1px solid var(--hair);
+  }
+  .channel .fader{
+    background:linear-gradient(180deg, var(--amber), var(--hot));
+    position:relative;
+  }
+  .channel.artist .fader{
+    background:linear-gradient(180deg, var(--cream), var(--surface-2));
+  }
+  .channel .fader .chnum{
+    position:absolute; top:14px; left:0; right:0; text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; font-weight:700; letter-spacing:.08em;
+    color:var(--base-deep);
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    top:auto; bottom:14px;
+  }
+  .channel-body{
+    padding:24px clamp(18px,3vw,32px);
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+  @media (min-width:760px){
+    .channel-body{
+      grid-template-columns:minmax(260px,360px) 1fr;
+      align-items:center;
+    }
+  }
+  .embed-wrap{
+    position:relative; width:100%; padding-top:56.25%;
+    background:#000; overflow:hidden; display:block;
+  }
+  .embed-wrap iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
+  .channel-meta .kicker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--amber-bright);
+    margin-bottom:8px;
+  }
+  .channel.artist .channel-meta .kicker{color:var(--cream); opacity:.7;}
+  .channel-meta h3{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700; font-size:clamp(20px,2.6vw,28px);
+    text-transform:uppercase; line-height:1.05; margin-bottom:12px;
+  }
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:8px 0; font-size:13.5px; color:var(--muted);
+  }
+  .meta-row dl{display:flex; gap:6px; margin-right:22px;}
+  .meta-row dt{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    align-self:center;
+  }
+  .meta-row dd{color:var(--cream);}
+  .trophy{
+    margin-top:14px; display:inline-block;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--hot); border-left:2px solid var(--hot); padding-left:10px;
+  }
+
+  /* ---------- artist section divider ---------- */
+  .artist-zone{
+    background:var(--base-deep);
+    border-top:1px solid var(--hair);
+    border-bottom:1px solid var(--hair);
+    margin-top:40px;
+  }
+
+  /* ---------- liner notes / bio ---------- */
+  .liner{
+    padding:64px clamp(20px,5vw,64px) 80px;
+    display:grid; gap:40px;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:860px){
+    .liner{grid-template-columns:220px 1fr;}
+  }
+  .liner .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--amber); writing-mode:initial;
+  }
+  .liner p{
+    font-size:16.5px; color:#dcd5c4; max-width:62ch; margin-bottom:16px;
+  }
+  .liner p b{color:var(--cream);}
+  .skills{
+    margin-top:24px; display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .skills span{
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    border:1px solid var(--hair); padding:6px 10px; color:var(--muted);
+  }
+
+  /* ---------- contact ---------- */
+  footer{
+    padding:56px clamp(20px,5vw,64px) 48px;
+    border-top:1px solid var(--hair);
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:32px;
+  }
+  footer h2{
+    font-family:'Big Shoulders Display', sans-serif; font-weight:900;
+    text-transform:uppercase; font-size:clamp(28px,5vw,46px);
+    margin-bottom:18px;
+  }
+  .contact-line{
+    font-family:'JetBrains Mono', monospace; font-size:14px;
+    color:var(--amber-bright); display:block; margin-bottom:6px;
+  }
+  .channel-id{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.1em; align-self:end;
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="topstrip">
+  <span>BTÖ STUDIO LOG</span>
+  <span class="rec"><span class="dot"></span> ON AIR</span>
+</div>
+
+<header class="hero">
+  <h1><span class="nowrap-name">Barlas Tan</span><br>Özemek</h1>
+  <div class="role">Music Producer <span>/</span> Composer <span>/</span> Advertising Music &amp; Artist</div>
+
+  <div class="vu" aria-hidden="true">
+    <div class="bar" style="--h:62%; animation-delay:0s"></div>
+    <div class="bar" style="--h:88%; animation-delay:.12s"></div>
+    <div class="bar" style="--h:45%; animation-delay:.24s"></div>
+    <div class="bar" style="--h:95%; animation-delay:.06s"></div>
+    <div class="bar" style="--h:70%; animation-delay:.3s"></div>
+    <div class="bar" style="--h:55%; animation-delay:.18s"></div>
+    <div class="bar" style="--h:82%; animation-delay:.36s"></div>
+    <div class="bar" style="--h:40%; animation-delay:.42s"></div>
+    <div class="bar" style="--h:90%; animation-delay:.09s"></div>
+    <div class="bar" style="--h:60%; animation-delay:.27s"></div>
+  </div>
+
+  <div class="award-badge">
+    <b>Crystal Apple</b> &amp; <b>Felix</b> — Best Advertising Music × 3
+  </div>
+</header>
+
+<!-- ÖDÜLLÜ İŞLER -->
+<div class="section-head">
+  <span class="num mono">CH 01–03</span>
+  <h2>Award-Winning Work</h2>
+  <div class="line"></div>
+</div>
+<p class="section-sub">Three brand films honored with "Best Advertising Music" at the Crystal Apple and Felix Awards.</p>
+
+<section class="channels">
+
+  <div class="channel">
+    <div class="fader"><span class="chnum">CH 01</span></div>
+    <div class="channel-body">
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/C19ygcG7erA" title="Boyner — Bi Tanışan Seversin" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="channel-meta">
+        <div class="kicker">Brand Film</div>
+        <h3>Boyner — "Bi Tanışan Seversin"</h3>
+        <div class="meta-row">
+          <dl><dt>Director</dt><dd>DUAL</dd></dl>
+          <dl><dt>Production</dt><dd>Public Film</dd></dl>
+          <dl><dt>Agency</dt><dd>VMLY&amp;R Istanbul</dd></dl>
+        </div>
+        <span class="trophy">Crystal Apple — Best Advertising Music</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="channel">
+    <div class="fader"><span class="chnum">CH 02</span></div>
+    <div class="channel-body">
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/RknkPV5hYBk" title="Penti — Oooh! Dünya Varmış" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="channel-meta">
+        <div class="kicker">Brand Film</div>
+        <h3>Penti — "Oooh! Dünya Varmış"</h3>
+        <div class="meta-row">
+          <dl><dt>Director</dt><dd>Gürcan Güreşçi</dd></dl>
+          <dl><dt>Agency</dt><dd>aRthuR</dd></dl>
+          <dl><dt>Year</dt><dd>2022</dd></dl>
+        </div>
+        <span class="trophy">Felix — Best Advertising Music</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="channel">
+    <div class="fader"><span class="chnum">CH 03</span></div>
+    <div class="channel-body">
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/5TA5QRmOoqs" title="GittiGidiyor" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="channel-meta">
+        <div class="kicker">Brand Film</div>
+        <h3>GittiGidiyor</h3>
+        <div class="meta-row">
+          <dl><dt>Year</dt><dd>2013</dd></dl>
+        </div>
+        <span class="trophy">Crystal Apple — Best Advertising Music</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SANATÇI KİMLİĞİ -->
+<div class="artist-zone">
+  <div class="section-head">
+    <span class="num mono">CH 04–05</span>
+    <h2>Artist Identity</h2>
+    <div class="line"></div>
+  </div>
+  <p class="section-sub">Original work outside advertising music, including songwriting and live performance.</p>
+
+  <section class="channels">
+
+    <div class="channel artist">
+      <div class="fader"><span class="chnum">CH 04</span></div>
+      <div class="channel-body">
+        <div class="embed-wrap">
+          <iframe src="https://www.youtube.com/embed/g1q3r2zDjHY" title="Kediler" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <div class="channel-meta">
+          <div class="kicker">Single</div>
+          <h3>"Kediler" feat. Bülent Ortaçgil</h3>
+          <div class="meta-row">
+            <dl><dt>Label</dt><dd>Ada Müzik</dd></dl>
+            <dl><dt>Words &amp; Music</dt><dd>Bülent Ortaçgil</dd></dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="channel artist">
+      <div class="fader"><span class="chnum">CH 05</span></div>
+      <div class="channel-body">
+        <div class="embed-wrap">
+          <iframe src="https://www.youtube.com/embed/NIaCVfNEYlQ" title="LALALAR — Yarın Yokmuş Gibi" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <div class="channel-meta">
+          <div class="kicker">LALALAR</div>
+          <h3>"Yarın Yokmuş Gibi"</h3>
+          <div class="meta-row">
+            <dl><dt>Project</dt><dd>LALALAR (Barlas Tan Özemek &amp; Ali Güçlü Şimşek)</dd></dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- LINER NOTES -->
+<div class="section-head">
+  <span class="num mono">NOTES</span>
+  <h2>Liner Notes</h2>
+  <div class="line"></div>
+</div>
+
+<section class="liner">
+  <div class="tag">Biography</div>
+  <div>
+    <p>
+      <b>Barlas Tan Özemek</b> is a music producer, composer, arranger, and performing musician, and a graduate of the Music Department at Istanbul Bilgi University. His advertising music has been honored with <b>"Best Advertising Music" twice at the Crystal Apple Awards and once at the Felix Awards</b>.
+    </p>
+    <p>
+      Alongside film and advertising music composition, he works in mixing/mastering engineering and music supervision. As an artist, he is a founding member and musical backbone of the duo <b>LALALAR</b>, and has collaborated with artists such as Bülent Ortaçgil and Sezen Aksu.
+    </p>
+    <p>
+      His studio practice is built on Ableton Live, Avid Pro Tools, Logic Pro, and Cubase, with advanced performance skills on acoustic/electric/bass guitar. He is currently based in Berlin.
+    </p>
+    <div class="skills">
+      <span>Advertising Music Composition</span>
+      <span>Film Scoring</span>
+      <span>Music Production</span>
+      <span>Arrangement</span>
+      <span>Mixing / Mastering</span>
+      <span>Music Supervision</span>
+      <span>Songwriting</span>
+      <span>Live Performance</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
